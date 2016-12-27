@@ -1,48 +1,40 @@
 'use strict';
 
 const Bob = function() {
-    const replaceDigits = txt => {
-        let replaced = txt;
-        replaced = replaced.replace(/1/g, 'one');
-        replaced = replaced.replace(/2/g, 'two');
-        replaced = replaced.replace(/3/g, 'three');
-        replaced = replaced.replace(/4/g, 'four');
-        replaced = replaced.replace(/5/g, 'five');
-        replaced = replaced.replace(/6/g, 'six');
-        replaced = replaced.replace(/7/g, 'seven');
-        replaced = replaced.replace(/8/g, 'eight');
-        replaced = replaced.replace(/9/g, 'nine');
-        replaced = replaced.replace(/0/g, 'zero');
-        return replaced;
+    const hasText = txt => {
+        const digits = txt.match(/\d/g);
+        const chars = txt.match(/\w/g);
+        
+        if (chars === null) return false;
+        if (digits !== null) return chars.length > digits.length;
+        return true;
     };
     
     const isShout = txt => {
-        return txt === txt.toUpperCase();
+        return txt === txt.toUpperCase() && hasText(txt);
     };
     
     const isQuestion = txt => {
-        return txt.endsWith('?');
+        return txt.endsWith('?') && !isShout(txt);
     };
     
-    const noText = txt => {
+    const justWhitespace = txt => {
         return txt.trim() === '';
     };
     
     this.hey = (txt) => {
-        const text = replaceDigits(txt);
-        
-        if (noText(text)) {
+        if (justWhitespace(txt)) {
             return 'Fine. Be that way!';
         }
     
-        if (isShout(text)) {
+        if (isQuestion(txt)) {
+            return 'Sure.';
+        }
+    
+        if (isShout(txt)) {
             return 'Whoa, chill out!';
         }
 
-        if (isQuestion(text)) {
-            return 'Sure.';
-        }
-        
         return 'Whatever.';
     }
 };
